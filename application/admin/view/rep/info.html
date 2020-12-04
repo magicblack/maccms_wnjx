@@ -1,0 +1,105 @@
+{include file="../../../application/admin/view/public/head" /}
+<div class="page-container p10">
+    <form class="layui-form layui-form-pane" method="post" action="">
+        <input type="hidden" name="__token__" value="{$Request.token}" />
+        <input type="hidden" name="key" value="{$param.id}" />
+        <blockquote class="layui-elem-quote layui-quote-nm">
+            {:lang('admin/rep/rep_tip')}
+        </blockquote>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:lang('status')}：</label>
+            <div class="layui-input-inline">
+                <input name="status" type="radio" id="rad-1" value="0" title="{:lang('close')}" {if condition="$info['status'] neq 1"}checked {/if}>
+                <input name="status" type="radio" id="rad-2" value="1" title="{:lang('open')}" {if condition="$info['status'] eq 1"}checked {/if}>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:lang('name')}：</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" placeholder="{:lang('admin/rep/name_tip')}" value="{$info['name']}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:lang('des')}：</label>
+            <div class="layui-input-block">
+                <input type="text" name="des" placeholder="" value="{$info['des']}" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:lang('admin/rep/tourl')}：</label>
+            <div class="layui-input-block">
+                <input type="text" name="tourl" placeholder="{:lang('admin/rep/tourl_tip')}" value="{$info['tourl']}" class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:lang('admin/rep/charset')}：</label>
+            <div class="layui-input-inline">
+                <select class="w150" name="charset">
+                    <option value="">{:lang('please_select')}</option>
+                    <option value="UTF-8" {if condition="$info['charset'] eq 'UTF-8'"}selected {/if}>UTF-8</option>
+                    <option value="GBK" {if condition="$info['charset'] eq 'GBK'"}selected {/if}>GBK</option>
+                    <option value="BIG5" {if condition="$info['charset'] eq 'BIG5'"}selected {/if}>BIG5</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:lang('admin/rep/rule')}：</label>
+            <div class="layui-input-block">
+                <textarea name="rule" class="layui-textarea" rows="30" placeholder="">{$info['rule']}</textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item center">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit" data-child="true">{:lang('btn_save')}</button>
+                <button class="layui-btn layui-btn-warm" type="reset">{:lang('btn_reset')}</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+{include file="../../../application/admin/view/public/foot" /}
+<script type="text/javascript">
+
+    layui.use(['form', 'layer'], function () {
+        // 操作对象
+        var form = layui.form
+                , layer = layui.layer
+                , $ = layui.jquery;
+
+        // 验证
+        form.verify({
+            show: function (value) {
+                if (value == "") {
+                    return "{:lang('name_empty')}";
+                }
+            }
+        });
+
+        $('.formCheckAll').click(function(){
+            var child = $('.role-list-form').find('input');
+            /* 自动选中子节点 */
+            child.each(function(index, item) {
+                item.checked = true;
+            });
+            form.render('checkbox');
+        });
+        $('.formCheckOther').click(function(){
+            var child = $('.role-list-form').find('input');
+            /* 自动选中子节点 */
+            child.each(function(index, item) {
+                item.checked = (item.checked  ? false : true);
+            });
+            form.render('checkbox');
+        });
+
+
+    });
+</script>
+
+</body>
+</html>

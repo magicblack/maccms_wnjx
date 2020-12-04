@@ -1,0 +1,78 @@
+{include file="../../../application/admin/view/public/head" /}
+<div class="page-container p10">
+    <div class="my-toolbar-box">
+        <div class="layui-btn-group">
+            <a data-href="{:url('info')}" class="layui-btn layui-btn-primary j-iframe" data-full="1"><i class="layui-icon">&#xe654;</i>{:lang('add')}</a>
+            <a data-href="{:url('import')}" class="layui-btn layui-btn-primary layui-upload" ><i class="layui-icon">&#xe654;</i>{:lang('import')}</a>
+        </div>
+    </div>
+
+    <form class="layui-form " method="post" id="pageListForm">
+        <table class="layui-table" lay-size="sm">
+            <thead>
+            <tr>
+                <th width="25"><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+                <th width="80">{:lang('name')}</th>
+                <th width="150">{:lang('des')}</th>
+                <th width="150">{:lang('admin/rep/tourl')}</th>
+                <th width="50">{:lang('admin/rep/charset')}</th>
+                <th width="80">{:lang('time')}</th>
+                <th width="60">{:lang('status')}</th>
+                <th width="100">{:lang('opt')}</th>
+            </tr>
+            </thead>
+            {volist name="list" id="vo"}
+            <tr>
+                <td><input type="checkbox" name="ids[]" value="{$vo.name}" class="layui-checkbox checkbox-ids" lay-skin="primary"></td>
+                <td>{$vo.name}</td>
+                <td>{$vo.des}</td>
+                <td>{$vo.tourl}</td>
+                <td>{$vo.charset}</td>
+                <td>{$vo.time|mac_day}</td>
+                <td>
+                    <input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="{:lang('open')}|{:lang('close')}" data-href="{:url('field?col=status&ids='.$key)}">
+                </td>
+                <td>
+                    <a class="layui-badge-rim" href="{:url('export?id='.$key)}" title="{:lang('export')}">{:lang('export')}</a>
+                    <a class="layui-badge-rim j-ajax" data-href="{:url('setconfig?id='.$key)}" confirm="{:lang('admin/rep/confirm')}" title="{:lang('setconfig')}">{:lang('admin/rep/setconfig')}</a>
+                    <a class="layui-badge-rim j-iframe" data-href="{:url('info')}?id={$key}" data-full="1" href="javascript:;" title="{:lang('edit')}">{:lang('edit')}</a>
+                    <a class="layui-badge-rim j-tr-del" data-href="{:url('del')}?ids={$key}" href="javascript:;" title="{:lang('del')}">{:lang('del')}</a>
+                </td>
+            </tr>
+            {/volist}
+            </tbody>
+        </table>
+
+    </form>
+</div>
+{include file="../../../application/admin/view/public/foot" /}
+
+<script type="text/javascript">
+    layui.use(['form','laypage', 'layer','upload'], function() {
+        // 操作对象
+        var form = layui.form
+            , layer = layui.layer
+            , $ = layui.jquery
+            , upload = layui.upload;
+
+        upload.render({
+            elem: '.layui-upload'
+            ,url: "{:url('rep/import')}"
+            ,method: 'post'
+            ,exts:'txt'
+            ,before: function(input) {
+                layer.msg("{:lang('upload_ing')}", {time:3000000});
+            },done: function(res, index, upload) {
+                var obj = this.item;
+                if (res.code == 0) {
+                    layer.msg(res.msg);
+                    return false;
+                }
+                location.reload();
+            }
+        });
+
+    });
+</script>
+</body>
+</html>

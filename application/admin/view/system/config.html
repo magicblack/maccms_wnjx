@@ -1,0 +1,320 @@
+{include file="../../../application/admin/view/public/head" /}
+
+<div class="page-container">
+
+    <div class="showpic" style="display:none;"><img class="showpic_img" width="120" height="160"></div>
+
+    <form class="layui-form layui-form-pane" action="">
+        <input type="hidden" name="__token__" value="{$Request.token}" />
+
+        <div class="layui-tab" lay-filter="tb1">
+            <ul class="layui-tab-title">
+                <li class="layui-this" lay-id="config_1">{:lang('config_info')}</li>
+                <li lay-id="config_2">{:lang('admin/system/config/performance')}</li>
+            </ul>
+            <div class="layui-tab-content">
+
+                <div class="layui-tab-item layui-show">
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/config/install_dir')}：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="site[install_dir]" placeholder="{:lang('admin/system/config/install_dir_tip')}" value="{$config['site']['install_dir']}" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/config/site_url')}：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="site[site_url]" placeholder="{:lang('admin/system/config/site_url_tip')}" value="{$config['site']['site_url']}" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/config/site_tourl')}：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="site[site_tourl]" placeholder="{:lang('admin/system/config/site_tourl_tip')}" value="{$config['site']['site_tourl']}" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/config/charset')}：</label>
+                        <div class="layui-input-inline">
+                            <select class="w150" name="site[site_charset]">
+                                <option value="UTF-8" {if condition="$config['site']['site_charset'] eq 'UTF-8'"}selected {/if}>UTF-8</option>
+                                <option value="GBK" {if condition="$config['site']['site_charset'] eq 'GBK'"}selected {/if}>GBK</option>
+                                <option value="BIG5" {if condition="$config['site']['site_charset'] eq 'BIG5'"}selected {/if}>BIG5</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/config/site_status')}：</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="site[site_status]" value="0" title="{:lang('close')}" {if condition="$config['site']['site_status'] eq 0"}checked {/if}>
+                            <input type="radio" name="site[site_status]" value="1" title="{:lang('open')}" {if condition="$config['site']['site_status'] eq 1"}checked {/if}>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/config/site_logo')}：</label>
+                        <div class="layui-input-inline w600">
+                            <input type="text" name="site[site_logo]" placeholder="{:lang('admin/system/config/site_logo_tip')}" value="{$config['site']['site_logo']}" class="layui-input upload-input">
+                        </div>
+                        <div class="layui-input-inline ">
+                            <button type="button" class="layui-btn layui-upload" lay-data="{data:{thumb:0,thumb_class:'site[site_logo]'}}" id="upload1">{:lang('upload_pic')}</button>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/config/template_dir')}：</label>
+                        <div class="layui-input-inline">
+                            <select class="w150" name="site[template_dir]">
+                                {volist name="templates" id="vo"}
+                                <option value="{$vo}" {if condition="$config['site']['template_dir'] eq $vo"}selected {/if}>{$vo}</option>
+                                {/volist}
+                            </select>
+                        </div>
+                        <label class="layui-form-label">{:lang('admin/system/config/html_dir')}：</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="site[html_dir]" placeholder="" value="{$config['site']['html_dir']}" class="layui-input w150" >
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">{:lang('admin/system/config/template_tip')}</div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/config/site_close_tip')}：</label>
+                        <div class="layui-input-block">
+                            <textarea name="site[site_close_tip]" class="layui-textarea"  placeholder="">{$config['site']['site_close_tip']}</textarea>
+                        </div>
+                    </div>
+
+            </div>
+
+            <div class="layui-tab-item">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/useragent')}：</label>
+                    <div class="layui-input-block">
+                        <textarea name="app[useragent]" class="layui-textarea"  placeholder="{:lang('admin/system/config/useragent_tip')}">{$config['app']['useragent']}</textarea>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/img_status')}：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="app[img_status]" value="0" title="{:lang('close')}" {if condition="$config['app']['img_status'] eq 0"}checked {/if}>
+                        <input type="radio" name="app[img_status]" value="1" title="{:lang('open')}" {if condition="$config['app']['img_status'] eq 1"}checked {/if}>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">{:lang('admin/system/config/img_status_tip')}</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/zy_status')}：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="app[zy_status]" value="0" title="{:lang('admin/system/config/rta')}" {if condition="$config['app']['zy_status'] eq 0"}checked {/if}>
+                        <input type="radio" name="app[zy_status]" value="1" title="{:lang('admin/system/config/local')}" {if condition="$config['app']['zy_status'] eq 1"}checked {/if}>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">{:lang('admin/system/config/zy_status_tip')}</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/ip_status')}：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="app[ip_status]" value="0" title="{:lang('close')}" {if condition="$config['app']['ip_status'] eq 0"}checked {/if}>
+                        <input type="radio" name="app[ip_status]" value="1" title="{:lang('open')}" {if condition="$config['app']['ip_status'] eq 1"}checked {/if}>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">{:lang('admin/system/config/ip_status_tip')}</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/cache_type')}：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="app[cache_type]" lay-filter="cache_type" value="file" title="file" {if condition="$config['app']['cache_type'] eq '0' || $config['app']['cache_type'] eq 'file' "}checked {/if}>
+                        <input type="radio" name="app[cache_type]" lay-filter="cache_type" value="memcache" title="memcache" {if condition="$config['app']['cache_type'] eq '1' || $config['app']['cache_type'] eq 'memcache'"}checked {/if}>
+                        <input type="radio" name="app[cache_type]" lay-filter="cache_type" value="redis" title="redis" {if condition="$config['app']['cache_type'] eq '2' || $config['app']['cache_type'] eq 'redis'"}checked {/if}>
+                        <input type="radio" name="app[cache_type]" lay-filter="cache_type" value="memcached" title="memcached" {if condition="$config['app']['cache_type'] eq '3' || $config['app']['cache_type'] eq 'memcached'"}checked {/if}>
+                    </div>
+                </div>
+
+                <div class="layui-form-item row_cache_server " {if condition="$config['app']['cache_type'] eq '0' || $config['app']['cache_type'] eq 'file'"} style="display:none;" {/if}>
+                    <label class="layui-form-label">{:lang('admin/system/config/cache_host')}：</label>
+                    <div class="layui-input-inline w150">
+                        <input type="text" name="app[cache_host]" placeholder="{:lang('admin/system/config/cache_host_tip')}" value="{$config['app']['cache_host']}" class="layui-input" >
+                    </div>
+                    <label class="layui-form-label">{:lang('admin/system/config/cache_port')}：</label>
+                    <div class="layui-input-inline w150">
+                        <input type="text" name="app[cache_port]" placeholder="{:lang('admin/system/config/cache_port_tip')}" value="{$config['app']['cache_port']}" class="layui-input" >
+                    </div>
+                    <label class="layui-form-label">{:lang('admin/system/config/cache_username')}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="app[cache_username]" placeholder="{:lang('admin/system/config/cache_username_tip')}" value="{$config['app']['cache_username']}" class="layui-input" >
+                    </div>
+                    <label class="layui-form-label">{:lang('admin/system/config/cache_password')}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="app[cache_password]" placeholder="{:lang('admin/system/config/cache_password_tip')}" value="{$config['app']['cache_password']}" class="layui-input" >
+                    </div>
+                    <button type="button" class="layui-btn layui-btn-normal" onclick="test_cache()">{:lang('admin/system/config/cache_test')}</button>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/cache_flag')}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="app[cache_flag]" placeholder="{:lang('admin/system/config/cache_flag_auto')}" value="{$config['app']['cache_flag']}" class="layui-input w150" >
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">{:lang('admin/system/config/cache_flag_tip')}</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/cache_page')}：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="app[cache_page]" value="0" title="{:lang('close')}" {if condition="$config['app']['cache_page'] neq 1"}checked {/if}>
+                        <input type="radio" name="app[cache_page]" value="1" title="{:lang('open')}" {if condition="$config['app']['cache_page'] eq 1"}checked {/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/cache_time_page')}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="app[cache_time_page]" placeholder="" value="{$config['app']['cache_time_page']}" class="layui-input w150" >
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">{:lang('admin/system/config/cache_time_tip')}</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/compress')}：</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="app[compress]" value="0" title="{:lang('close')}" {if condition="$config['app']['compress'] neq 1"}checked {/if}>
+                        <input type="radio" name="app[compress]" value="1" title="{:lang('open')}" {if condition="$config['app']['compress'] eq 1"}checked {/if}>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/browser_junmp')}：</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="app[browser_junmp]" value="0" title="{:lang('close')}" {if condition="$config['app']['browser_junmp'] eq 0"}checked {/if}>
+                        <input type="radio" name="app[browser_junmp]" value="1" title="{:lang('open')}" {if condition="$config['app']['browser_junmp'] eq 1"}checked {/if}>
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">{:lang('admin/system/config/browser_junmp_tip')}</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/404')}：</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="app[page_404]" placeholder="" value="{$config['app']['page_404']}" class="layui-input w150">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">{:lang('admin/system/config/404_tip')}</div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">{:lang('admin/system/config/lang')}：</label>
+                    <div class="layui-input-inline" >
+                        <select class="w150" name="app[lang]">
+                            {volist name="langs" id="vo"}
+                            <option value="{$vo}" {if condition="$config['app']['lang'] eq $vo"}selected {/if}>{$vo}</option>
+                            {/volist}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+                <div class="layui-form-item center">
+                    <div class="layui-input-block">
+                        <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit">{:lang('btn_save')}</button>
+                        <button class="layui-btn layui-btn-warm" type="reset">{:lang('btn_reset')}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+{include file="../../../application/admin/view/public/foot" /}
+<script type="text/javascript" src="__STATIC__/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+    layui.use(['form','upload', 'layer'], function(){
+        // 操作对象
+        var element = layui.element
+            ,form = layui.form
+            , layer = layui.layer
+            , upload = layui.upload;
+
+        form.on('radio(cache_type)',function(data){
+            $('.row_cache_server').hide();
+           if(data.value=='memcache' || data.value=='redis' || data.value=='memcached'){
+               $('.row_cache_server').show();
+           }
+        });
+
+        element.on('tab(tb1)', function(){
+            $.cookie('config_tab', this.getAttribute('lay-id'));
+        });
+
+        if( $.cookie('config_tab') !=null ) {
+            element.tabChange('tb1', $.cookie('config_tab'));
+        }
+
+        upload.render({
+            elem: '.layui-upload'
+            ,url: "{:url('upload/upload')}?flag=site"
+            ,method: 'post'
+            ,before: function(input) {
+                layer.msg("{:lang('upload_ing')}", {time:3000000});
+            },done: function(res, index, upload) {
+                var obj = this.item;
+                if (res.code == 0) {
+                    layer.msg(res.msg);
+                    return false;
+                }
+                layer.closeAll();
+                var input = $(obj).parent().parent().find('.upload-input');
+                if ($(obj).attr('lay-type') == 'image') {
+                    input.siblings('img').attr('src', res.data.file).show();
+                }
+                input.val(res.data.file);
+            }
+        });
+
+        $('.upload-input').hover(function (e){
+            var e = window.event || e;
+            var imgsrc = $(this).val();
+            if(imgsrc.trim()==""){ return; }
+            var left = e.clientX+document.body.scrollLeft+20;
+            var top = e.clientY+document.body.scrollTop+20;
+            $(".showpic").css({left:left,top:top,display:""});
+            if(imgsrc.indexOf('://')<0){ imgsrc = ROOT_PATH + '/' + imgsrc;	} else{ imgsrc = imgsrc.replace('mac:','http:'); }
+            $(".showpic_img").attr("src", imgsrc);
+        },function (e){
+            $(".showpic").css("display","none");
+        });
+
+
+    });
+
+    function test_cache(){
+        var type = $("input[name='app[cache_type]']:checked").val();
+        var host = $("input[name='app[cache_host]']").val();
+        var port = $("input[name='app[cache_port]']").val();
+        var user_name =  $("input[name='app[cache_username]']").val();
+        var password = $("input[name='app[cache_password]']").val();
+        layer.msg("{:lang('wait_submit')}",{time:500000});
+        $.ajax({
+            url: "{:url('system/test_cache')}",
+            type: "post",
+            dataType: "json",
+            data: {type:type,host:host,port:port,username:user_name,password:password},
+            beforeSend: function () {
+            },
+            error:function(r){
+                layer.msg("{:lang('admin/system/config/test_err')}",{time:1800});
+            },
+            success: function (r) {
+                layer.msg(r.msg,{time:1800});
+            },
+            complete: function () {
+            }
+        });
+    }
+
+
+</script>
+
+</body>
+</html>

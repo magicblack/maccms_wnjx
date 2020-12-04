@@ -1,0 +1,65 @@
+{include file="../../../application/admin/view/public/head" /}
+
+<div class="page-container">
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-tab" lay-filter="tb1">
+            <ul class="layui-tab-title">
+                <li class="layui-this" lay-id="configurl_3">{:lang('config_info')}</li>
+            </ul>
+            <div class="layui-tab-content">
+
+                <div class="layui-tab-item layui-show">
+                    <blockquote class="layui-elem-quote layui-quote-nm">
+                        {:lang('admin/system/admin/tip')}
+                    </blockquote>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/admin/name')}：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="admin[name]" placeholder="{:lang('admin/system/admin/name_tip')}" value="{$config['admin']['name']}" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{:lang('admin/system/admin/pass')}：</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="admin[pass]" placeholder="{:lang('admin/system/admin/pass_tip')}" value="{$config['admin']['pass']}" class="layui-input">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div class="layui-form-item center">
+            <div class="layui-input-block">
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit">{:lang('btn_save')}</button>
+                <button class="layui-btn layui-btn-warm" type="reset">{:lang('btn_reset')}</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{include file="../../../application/admin/view/public/foot" /}
+
+<script type="text/javascript" src="__STATIC__/js/jquery.cookie.js"></script>
+<script type="text/javascript">
+    layui.use(['element', 'form', 'layer'], function() {
+        var element = layui.element
+            ,form = layui.form
+            , layer = layui.layer;
+
+
+        element.on('tab(tb1)', function(){
+            $.cookie('configurl_tab', this.getAttribute('lay-id'));
+        });
+
+        if( $.cookie('configurl_tab') !=null ) {
+            element.tabChange('tb1', $.cookie('configurl_tab'));
+        }
+
+    });
+
+</script>
+
+</body>
+</html>
