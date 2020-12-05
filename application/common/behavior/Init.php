@@ -47,7 +47,7 @@ class Init
             config('url_route_on',false);
         }
         else{
-            config('url_route_on',false);
+            config('url_route_on',true);
         }
 
         if(empty($config['app']['pathinfo_depr'])){

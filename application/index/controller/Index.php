@@ -14,7 +14,7 @@ class Index extends Base
         $request = request();
         $p = $request->url();
         $config = config('maccms');
-
+        $domain = $_SERVER['HTTP_HOST'];
         //spider
         if($config['spider']['status']==1) {
             $ua = strtolower($_SERVER['HTTP_USER_AGENT']);
@@ -32,8 +32,8 @@ class Index extends Base
         if(!empty($p) && $p!='/' && $p!='/index.php'){
             $url .= ''. $p;
         }
-        $rep_url = $config['site']['site_url'].'';
 
+        $rep_url = $GLOBALS['http_type'] . $domain . '';
         //cache
         if($config['app']['cache_page']=='1' && $config['app']['cache_time_page']){
             $this->load_page_cache($url);
@@ -62,6 +62,12 @@ class Index extends Base
                 foreach ($v['arr'] as $k2 => $v2) {
                     $k2 = mac_build_regx($k2, 'is');
                     $html = @preg_replace($k2, $v2, $html);
+                }
+                if(is_array($v['domain'][$domain])){
+                    foreach($v['domain'][$domain] as $k2 => $v2) {
+                        $k2 = mac_build_regx($k2, 'is');
+                        $html = @preg_replace($k2, $v2, $html);
+                    }
                 }
             }
         }

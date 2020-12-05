@@ -29,7 +29,7 @@ class Rep extends Base
             unset($param['__token__'],$param['key']);
             $param['time'] = time();
 
-
+            $param['rule'] = str_replace(chr(13),'',$param['rule']);
             $rows = explode(chr(10), $param['rule']);
             $arr=[];
             foreach ($rows as $r) {
@@ -39,6 +39,23 @@ class Rep extends Base
                 }
             }
             $param['arr'] = $arr;
+
+            $param['rule_domain'] = str_replace(chr(13),'',$param['rule_domain']);
+            $rows = explode(chr(10), $param['rule_domain']);
+            $arr=[];
+            $domain='';
+            foreach ($rows as $r) {
+                if (!empty($r)){
+                    $a = explode('[to]', $r);
+                    if(count($a)==1){
+                        $domain = trim($a[0]);
+                        continue;
+                    }
+                    $arr[$domain][$a[0]] = $a[1];
+                }
+            }
+            $param['domain'] = $arr;
+
 
             $list[$key] = $param;
             $res = mac_arr2file( APP_PATH .'extra/rep.php', $list);

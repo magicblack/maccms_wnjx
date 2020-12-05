@@ -74,13 +74,36 @@ return array (
     'charset' => 'GBK',
     'rule' => '<!--(.*?)-->[to]
 <iframe(.*?)</iframe>[to]
+<div id="ba_sc">([\\s\\S]+?)</div>[to]<center><font style="font-size:40px;">苹果cms万能镜像系统测试</font></center>
+<p class="ba_hp">([\\s\\S]+?)</p>[to]
+<div class="lg">([\\s\\S]+?)</div>[to]
 百度搜索风云榜[to]我的搜索风云榜-苹果cms万能镜像系统',
-    'time' => 1607089191,
+    'rule_domain' => 'c.cn
+实时热点[to]站群热点
+七日关注[to]站群关注
+b.cn
+首页[to]我的',
+    'time' => 1607168636,
     'arr' => 
     array (
-      '<!--(.*?)-->' => '',
-      '<iframe(.*?)</iframe>' => '',
+      '<!--(.*?)-->' => '',
+      '<iframe(.*?)</iframe>' => '',
+      '<div id="ba_sc">([\\s\\S]+?)</div>' => '<center><font style="font-size:40px;">苹果cms万能镜像系统测试</font></center>',
+      '<p class="ba_hp">([\\s\\S]+?)</p>' => '',
+      '<div class="lg">([\\s\\S]+?)</div>' => '',
       '百度搜索风云榜' => '我的搜索风云榜-苹果cms万能镜像系统',
+    ),
+    'domain' => 
+    array (
+      'c.cn' => 
+      array (
+        '实时热点' => '站群热点',
+        '七日关注' => '站群关注',
+      ),
+      'b.cn' => 
+      array (
+        '首页' => '我的',
+      ),
     ),
   ),
 );

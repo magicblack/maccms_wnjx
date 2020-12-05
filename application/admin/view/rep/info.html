@@ -49,13 +49,20 @@
         <div class="layui-form-item">
             <label class="layui-form-label">{:lang('admin/rep/rule')}：</label>
             <div class="layui-input-block">
-                <textarea name="rule" class="layui-textarea" rows="30" placeholder="">{$info['rule']}</textarea>
+                <textarea name="rule" class="layui-textarea" rows="10" placeholder="">{$info['rule']}</textarea>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">{:lang('admin/rep/rule_domain')}：</label>
+            <div class="layui-input-block">
+                <textarea name="rule_domain" class="layui-textarea" rows="10" placeholder="">{$info['rule_domain']}</textarea>
             </div>
         </div>
 
         <div class="layui-form-item center">
             <div class="layui-input-block">
-                <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit" data-child="true">{:lang('btn_save')}</button>
+                <button type="submit" class="layui-btn" lay-submit="" lay-filter="formSubmit" data-child="">{:lang('btn_save')}</button>
                 <button class="layui-btn layui-btn-warm" type="reset">{:lang('btn_reset')}</button>
             </div>
         </div>
