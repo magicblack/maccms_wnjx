@@ -50,8 +50,10 @@ class Index extends Base
         $html = mac_curl_get($url,$heads);
         $html = mac_convert_encoding($html,'UTF-8',$config['site']['site_charset']);
 
+
         //替换url
-        $html = str_replace($config['site']['site_tourl'],$rep_url,$html);
+        $p = pathinfo($config['site']['site_tourl']);
+        $html = str_replace($p['basename'],$domain,$html);
         $html = str_replace($rep_url.$rep_url,$rep_url,$html);
         //echo($html);die;
 
@@ -79,9 +81,10 @@ class Index extends Base
             $preg = '/<link([\s\S]+?)href=[\'"]?([^>\'"\s]*)([\s\S]+?)>/is';
             preg_match_all($preg, $html, $out);
             foreach ($out[2] as $k => $v) {
-                if (strlen($v) > 5 && substr($v, 0, 1) === '/') {
+                $a = substr($v,0,1);
+                if(strlen($v)>5 && in_array($a,['/','.'])) {
                     if (empty($arr[$v])) {
-                        $link = $this->url_check($v, $url);
+                        $link = mac_url_check($v, $url);
                         $html = str_replace($v, $link, $html);
                     }
                 }
@@ -93,9 +96,10 @@ class Index extends Base
             $preg = '/<script([\s\S]+?)src=[\'"]?([^>\'"\s]*)([\s\S]+?)>/is';
             preg_match_all($preg, $html, $out);
             foreach ($out[2] as $k => $v) {
-                if (strlen($v) > 5 && substr($v, 0, 1) === '/') {
+                $a = substr($v,0,1);
+                if(strlen($v)>5 && in_array($a,['/','.'])) {
                     if (empty($arr[$v])) {
-                        $link = $this->url_check($v, $url);
+                        $link = mac_url_check($v, $url);
                         $html = str_replace($v, $link, $html);
                     }
                 }
@@ -105,26 +109,30 @@ class Index extends Base
 
         //a
         $arr = [];
-        $preg = '/<a([\s\S]+?)href=[\'"]?([^>\'" ]*)[\'"]([\s\S]+?)>([\s\S]+?)<\/a>/is';
+        $preg = '/<a([\s\S]+?)href=[\'"]?([^>\'" ]*)[\'"]([\s\S]+?)>/is';
         preg_match_all($preg, $html, $out);
         foreach($out[2] as $k=>$v){
-            if(strlen($v)>5 && substr($v,0,1)==='/'){
+            $a = substr($v,0,1);
+            if(strlen($v)>5 && in_array($a,['/','.'])){
                 if(empty($arr[$v])) {
-                    $arr[$v] = $rep_url . $v;
-                    $html = str_replace($v, $rep_url. $v, $html);
+                    $link = mac_url_check($v, $url);
+                    $arr[$v] = $rep_url.$link;
+                    $html = str_replace($v, $rep_url. $link, $html);
                 }
             }
         }
-        //dump($arr);die;
+        //dump($out);die;
 
         //img
         $preg = '/<img([\s\S]+?)src=[\'"]?([^>\'"\s]*)[\'"]([\s\S]+?)>/is';
         preg_match_all($preg,$html,$out);
         foreach($out[2] as $k=>$v){
-            if(strlen($v)>5 && substr($v,0,1)==='/'){
+            $a = substr($v,0,1);
+            if(strlen($v)>5 && in_array($a,['/','.'])){
                 if(empty($arr[$v])) {
-                    $arr[$v] = $rep_url . $v;
-                    $img = $config['site']['site_tourl'] . $v;
+                    $link = mac_url_check($v, $url);
+                    $arr[$v] = $rep_url . $link;
+                    $img = $config['site']['site_tourl'] . $link;
                     if($config['app']['img_status'] =='1'){
                         $img = '/img.php?url='. $img;
                     }
@@ -148,24 +156,10 @@ class Index extends Base
         //cache
         if($config['app']['cache_page']=='1' && $config['app']['cache_time_page']){
             $cach_name = $_SERVER['HTTP_HOST']. '_'. MAC_MOB . '_'. $config['app']['cache_flag']. '_' . $url .'_'. http_build_query(mac_param_url());
-            $res = Cache::set($cach_name,$html,$config['app']['cache_time_page']);
+            Cache::set($cach_name,$html,$config['app']['cache_time_page']);
         }
 
         echo $html;exit;
-    }
-
-    protected function url_check($url,$baseurl)
-    {
-        $urlinfo = parse_url($baseurl);
-        $baseurl = $urlinfo['scheme'].'://'.$urlinfo['host'].(substr($urlinfo['path'], -1, 1) === '/' ? substr($urlinfo['path'], 0, -1) : str_replace('\\', '/', dirname($urlinfo['path']))).'/';
-        if (strpos($url, '://') === false) {
-            if ($url[0] == '/') {
-                $url = $urlinfo['scheme'].'://'.$urlinfo['host'].$url;
-            } else {
-                $url = $baseurl.$url;
-            }
-        }
-        return $url;
     }
 
 }

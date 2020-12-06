@@ -765,3 +765,22 @@ function mac_find_array($text,$start,$end)
     return $str;
 }
 
+function mac_url_check($url,$baseurl)
+{
+    $urlinfo = parse_url($baseurl);
+    $baseurl = $urlinfo['scheme'].'://'.$urlinfo['host'].(substr($urlinfo['path'], -1, 1) === '/' ? substr($urlinfo['path'], 0, -1) : str_replace('\\', '/', dirname($urlinfo['path']))).'/';
+    if(strpos($url, '://') === false) {
+        if($url[0]=='/'){
+            $url = $urlinfo['scheme'].'://'.$urlinfo['host'].$url;
+        }
+        elseif(substr($url,0,2)=='./'){
+            $url = substr($url,1);
+        }
+        else{
+            $url = $baseurl.$url;
+        }
+    }
+    return $url;
+}
+
+
