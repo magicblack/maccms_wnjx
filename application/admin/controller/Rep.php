@@ -29,8 +29,11 @@ class Rep extends Base
             unset($param['__token__'],$param['key']);
             $param['time'] = time();
 
-            $param['rule'] = str_replace(chr(13),'',$param['rule']);
-            $rows = explode(chr(10), $param['rule']);
+            $param['domain_list'] = str_replace(chr(13),'',trim($param['domain_list']));
+            $param['domain_arr']  = explode(chr(10), $param['domain_list']);
+
+            $param['rule_all'] = str_replace(chr(13),'',$param['rule_all']);
+            $rows = explode(chr(10), $param['rule_all']);
             $arr=[];
             foreach ($rows as $r) {
                 if (!empty($r)){
@@ -38,7 +41,7 @@ class Rep extends Base
                     $arr[$a[0]] = $a[1];
                 }
             }
-            $param['arr'] = $arr;
+            $param['rule_all_arr'] = $arr;
 
             $param['rule_domain'] = str_replace(chr(13),'',$param['rule_domain']);
             $rows = explode(chr(10), $param['rule_domain']);
@@ -54,7 +57,7 @@ class Rep extends Base
                     $arr[$domain][$a[0]] = $a[1];
                 }
             }
-            $param['domain'] = $arr;
+            $param['rule_domain_arr'] = $arr;
 
 
             $list[$key] = $param;
@@ -134,7 +137,7 @@ class Rep extends Base
             @unlink($info->getpathName());
             if($data){
 
-                if(!isset($data['status']) || empty($data['name']) || empty($data['rule']) || empty($data['arr']) ){
+                if(!isset($data['status']) || empty($data['name']) || empty($data['rule_all']) || empty($data['tourl']) || empty($data['charset']) || empty($data['rule_all_arr'])   ){
                     return $this->error(lang('format_err'));
                 }
                 $data['time'] = 0;
@@ -154,24 +157,4 @@ class Rep extends Base
             return $this->error($file->getError());
         }
     }
-
-    public function setconfig()
-    {
-        $param = input();
-        $list = config('rep');
-        $info = $list[$param['id']];
-
-        $config = config('maccms');
-        $config['site']['site_tourl'] = $info['tourl'];
-        $config['site']['site_charset'] = $info['charset'];
-
-        $res = mac_arr2file(APP_PATH . 'extra/maccms.php', $config);
-        if ($res === false) {
-            return $this->error(lang('write_err_config'));
-        }
-        return $this->success(lang('save_ok'));
-
-    }
-
-
 }

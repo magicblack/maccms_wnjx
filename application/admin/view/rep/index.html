@@ -16,9 +16,10 @@
                 <th width="150">{:lang('des')}</th>
                 <th width="150">{:lang('admin/rep/tourl')}</th>
                 <th width="50">{:lang('admin/rep/charset')}</th>
+                <th width="100">{:lang('admin/rep/domain_list')}</th>
                 <th width="80">{:lang('time')}</th>
                 <th width="60">{:lang('status')}</th>
-                <th width="100">{:lang('opt')}</th>
+                <th width="60">{:lang('opt')}</th>
             </tr>
             </thead>
             {volist name="list" id="vo"}
@@ -28,13 +29,13 @@
                 <td>{$vo.des}</td>
                 <td>{$vo.tourl}</td>
                 <td>{$vo.charset}</td>
+                <td>{$vo.domain_list}</td>
                 <td>{$vo.time|mac_day}</td>
                 <td>
                     <input type="checkbox" name="status" {if condition="$vo['status'] eq 1"}checked{/if} value="{$vo['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="{:lang('open')}|{:lang('close')}" data-href="{:url('field?col=status&ids='.$key)}">
                 </td>
                 <td>
                     <a class="layui-badge-rim" href="{:url('export?id='.$key)}" title="{:lang('export')}">{:lang('export')}</a>
-                    <a class="layui-badge-rim j-ajax" data-href="{:url('setconfig?id='.$key)}" confirm="{:lang('admin/rep/confirm')}" title="{:lang('setconfig')}">{:lang('admin/rep/setconfig')}</a>
                     <a class="layui-badge-rim j-iframe" data-href="{:url('info')}?id={$key}" data-full="1" href="javascript:;" title="{:lang('edit')}">{:lang('edit')}</a>
                     <a class="layui-badge-rim j-tr-del" data-href="{:url('del')}?ids={$key}" href="javascript:;" title="{:lang('del')}">{:lang('del')}</a>
                 </td>

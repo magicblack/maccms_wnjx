@@ -8,9 +8,6 @@ return array (
   'site' => 
   array (
     'install_dir' => '/',
-    'site_url' => 'http://c.cn',
-    'site_tourl' => 'https://top.baidu.com',
-    'site_charset' => 'GBK',
     'site_status' => '1',
     'site_logo' => '',
     'template_dir' => 'default',

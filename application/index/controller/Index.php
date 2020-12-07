@@ -25,7 +25,36 @@ class Index extends Base
                 exit;
             }
         }
-        $url = $config['site']['site_tourl'];
+
+        //匹配规则
+        $rep_list = config('rep');
+        $rc=false;
+        foreach($rep_list as $k=>$v){
+            if($rc){
+                break;
+            }
+            if($v['status'] =='1'){
+                if(empty($v['domain_list'])){
+                    $rep = $v;
+                    break;
+                }
+                else{
+                    foreach($v['domain_arr'] as $k2=>$v2){
+                        if(strpos($domain,$v2)!==false){
+                            $rep = $v;
+                            $rc=true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if(empty($rep)){
+            echo lang('matching_rule_failed');
+            exit;
+        }
+
+        $url = $rep['tourl'];
         if($_SERVER['PHP_SELF']!='/index.php'){
             $url .= $_SERVER['PHP_SELF'];
         }
@@ -46,30 +75,26 @@ class Index extends Base
             $heads[] = 'CLIENT-IP'. request()->ip();
         }
 
-
         $html = mac_curl_get($url,$heads);
-        $html = mac_convert_encoding($html,'UTF-8',$config['site']['site_charset']);
-
+        $html = mac_convert_encoding($html,'UTF-8',$rep['charset']);
 
         //替换url
-        $p = pathinfo($config['site']['site_tourl']);
+        $p = pathinfo($rep['tourl']);
         $html = str_replace($p['basename'],$domain,$html);
         $html = str_replace($rep_url.$rep_url,$rep_url,$html);
+        //dump($p);die;
         //echo($html);die;
 
         //替换配置
-        $rep = config('rep');
-        foreach($rep as $k=>$v){
-            if($v['status'] =='1') {
-                foreach ($v['arr'] as $k2 => $v2) {
+        foreach ($rep['rule_all_arr'] as $k=>$v) {
+            $k = mac_build_regx($k, 'is');
+            $html = preg_replace($k, $v, $html);
+        }
+        foreach($rep['rule_domain_arr'] as  $k=>$v){
+            if(strpos($domain,$k)!==false){
+                foreach($rep['rule_domain_arr'][$k] as $k2 => $v2) {
                     $k2 = mac_build_regx($k2, 'is');
-                    $html = @preg_replace($k2, $v2, $html);
-                }
-                if(is_array($v['domain'][$domain])){
-                    foreach($v['domain'][$domain] as $k2 => $v2) {
-                        $k2 = mac_build_regx($k2, 'is');
-                        $html = @preg_replace($k2, $v2, $html);
-                    }
+                    $html = preg_replace($k2, $v2, $html);
                 }
             }
         }
@@ -132,7 +157,7 @@ class Index extends Base
                 if(empty($arr[$v])) {
                     $link = mac_url_check($v, $url);
                     $arr[$v] = $rep_url . $link;
-                    $img = $config['site']['site_tourl'] . $link;
+                    $img = $rep['tourl'] . $link;
                     if($config['app']['img_status'] =='1'){
                         $img = '/img.php?url='. $img;
                     }

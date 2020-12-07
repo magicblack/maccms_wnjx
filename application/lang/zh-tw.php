@@ -69,6 +69,7 @@ return [
     'verify_err'=>'驗證碼錯誤',
     'wait_submit'=>'數據提交中...',
     'please_select'=>'請選擇...',
+    'matching_rule_failed'=>'匹配規則失敗',
 
     'menu/index'=>'首頁',
     'menu/welcome'=>'歡迎頁面',
@@ -122,12 +123,12 @@ return [
                         1.每行壹組用[to]來連接，前面是需要替換的內容，後面是替換為內容; <br>
                         2.替換為內容可以為空，如需插入js廣告建議替換<body>或</body>或其他元素實現插入; <br>
                         3.常用正則([\s\S]+?)  或  (.*?)，建議使用第壹個;<br>
-                        4.目標網址和網站編碼只為快速導入網站配置本身沒有作用;<br>
-                        5.站群替換格式：先域名單獨壹行然後下邊是該域名下的替換內容同上。
+                        4.站群替換格式：先域名單獨壹行然後下邊是該域名下的替換內容同上;<br>
+                        5.域名列表格式：多個規則裏請不要使用重復域名否則會匹配到第壹個規則。  a.cn會匹配所有子域名;1.a.cn只匹配該域名。 不填寫內容會匹配所有綁定到該站點的域名;<br>
                         ',
 
 
-    'admin/rep/rule'=>'全局替換',
+    'admin/rep/rule_all'=>'全局替換',
     'admin/rep/rule_domain'=>'站群替換',
     'admin/rep/name_tip'=>'只允許字母+數字，不能出現漢字',
     'admin/rep/tourl'=>'目標網址',
@@ -135,7 +136,8 @@ return [
     'admin/rep/charset'=>'網站編碼',
     'admin/rep/confirm'=>'是否將目標網址和網站編碼寫入網站配置中？',
     'admin/rep/setconfig'=>'寫入配置',
-
+    'admin/rep/domain_list'=>'域名列表',
+    'admin/rep/domain_list_tip'=>'多個規則裏請不要使用重復域名否則會匹配到第壹個規則。  a.cn會匹配所有子域名;1.a.cn只匹配該域名。 不填寫內容會匹配所有綁定到該站點的域名 ',
 
     'admin/system/spider/status'=>'是否屏蔽',
     'admin/system/spider/rule'=>'屏蔽規則',

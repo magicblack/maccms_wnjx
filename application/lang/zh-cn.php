@@ -69,6 +69,7 @@ return [
     'verify_err'=>'验证码错误',
     'wait_submit'=>'数据提交中...',
     'please_select'=>'请选择...',
+    'matching_rule_failed'=>'匹配规则失败',
 
     'menu/index'=>'首页',
     'menu/welcome'=>'欢迎页面',
@@ -122,12 +123,12 @@ return [
                         1.每行一组用[to]来连接，前面是需要替换的内容，后面是替换为内容; <br>
                         2.替换为内容可以为空，如需插入js广告建议替换<body>或</body>或其他元素实现插入; <br>
                         3.常用正则([\s\S]+?)  或  (.*?)，建议使用第一个;<br>
-                        4.目标网址和网站编码只为快速导入网站配置本身没有作用;<br>
-                        5.站群替换格式：先域名单独一行然后下边是该域名下的替换内容同上。
+                        4.站群替换格式：先域名单独一行然后下边是该域名下的替换内容同上;<br>
+                        5.域名列表格式：多个规则里请不要使用重复域名否则会匹配到第一个规则。  a.cn会匹配所有子域名;1.a.cn只匹配该域名。 不填写内容会匹配所有绑定到该站点的域名;<br>
                         ',
 
 
-    'admin/rep/rule'=>'全局替换',
+    'admin/rep/rule_all'=>'全局替换',
     'admin/rep/rule_domain'=>'站群替换',
     'admin/rep/name_tip'=>'只允许字母+数字，不能出现汉字',
     'admin/rep/tourl'=>'目标网址',
@@ -135,7 +136,8 @@ return [
     'admin/rep/charset'=>'网站编码',
     'admin/rep/confirm'=>'是否将目标网址和网站编码写入网站配置中？',
     'admin/rep/setconfig'=>'写入配置',
-
+    'admin/rep/domain_list'=>'域名列表',
+    'admin/rep/domain_list_tip'=>'多个规则里请不要使用重复域名否则会匹配到第一个规则。  a.cn会匹配所有子域名;1.a.cn只匹配该域名。 不填写内容会匹配所有绑定到该站点的域名 ',
 
     'admin/system/spider/status'=>'是否屏蔽',
     'admin/system/spider/rule'=>'屏蔽规则',
