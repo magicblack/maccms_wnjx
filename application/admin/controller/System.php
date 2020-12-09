@@ -186,4 +186,23 @@ class System extends Base
         return $this->fetch('admin@system/admin');
     }
 
+
+    public function external()
+    {
+        if (Request()->isPost()) {
+            $config = input();
+            $config_new['external'] = $config['external'];
+
+            $config_old = config('maccms');
+            $config_new = array_merge($config_old, $config_new);
+            $res = mac_arr2file(APP_PATH . 'extra/maccms.php', $config_new);
+            if ($res === false) {
+                return $this->error(lang('write_err_config'));
+            }
+            return $this->success(lang('save_ok'));
+        }
+
+        $this->assign('config', config('maccms'));
+        return $this->fetch('admin@system/external');
+    }
 }

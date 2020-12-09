@@ -6,7 +6,7 @@
 '遵循Apache2开源协议发布，并提供免费使用。
 '--------------------------------------------------------
 */
-header('Content-Type:text/html;charset=utf-8');
+
 // 检测PHP环境
 if(version_compare(PHP_VERSION,'5.5.0','<'))  die('PHP版本需要>=5.5，请升级【PHP version requires > = 5.5，please upgrade】');
 //超时时间

@@ -16,12 +16,10 @@ return array (
   ),
   'app' => 
   array (
-    'useragent' => 'Sosospider+(+http://help.soso.com/webspider.htm)
-Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)
-Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)
-Baiduspider-image+(+http://www.baidu.com/search/spider.htm)
-Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0); 360Spider',
+    'useragent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.57',
+    'ignore_suffix' => 'zip|rar|doc|pdf|7z',
     'img_status' => '1',
+    'img_file' => 'img.php',
     'zy_status' => '0',
     'ip_status' => '0',
     'cache_type' => 'file',
@@ -38,11 +36,7 @@ Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0); 360Spider',
     'lang' => 'zh-cn',
     'useragent_arr' => 
     array (
-      0 => 'Sosospider+(+http://help.soso.com/webspider.htm)',
-      1 => 'Mozilla/5.0 (compatible; Yahoo! Slurp; http://help.yahoo.com/help/us/ysearch/slurp)',
-      2 => 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
-      3 => 'Baiduspider-image+(+http://www.baidu.com/search/spider.htm)',
-      4 => 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0); 360Spider',
+      0 => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.57',
     ),
   ),
   'rewrite' => 
@@ -55,5 +49,13 @@ Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0); 360Spider',
   array (
     'status' => '0',
     'rule' => 'yahoo|bing',
+  ),
+  'external' => 
+  array (
+    'status' => '0',
+    'encode' => '0',
+    'mode' => '0',
+    'file' => 'link.php',
+    'ignore_domain' => '',
   ),
 );

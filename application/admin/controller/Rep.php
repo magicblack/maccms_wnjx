@@ -59,8 +59,13 @@ class Rep extends Base
             }
             $param['rule_domain_arr'] = $arr;
 
+            if(empty($key)){
+                $list[] = $param;
+            }
+            else{
+                $list[$key] = $param;
+            }
 
-            $list[$key] = $param;
             $res = mac_arr2file( APP_PATH .'extra/rep.php', $list);
             if($res===false){
                 return $this->error(lang('write_err_config'));

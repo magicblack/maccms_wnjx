@@ -783,4 +783,24 @@ function mac_url_check($url,$baseurl)
     return $url;
 }
 
+function mac_content_type($u)
+{
+    $dir = pathinfo($u);
+    $ext = $dir['extension'];
+    $types = array(
+        'js'=>'text/javascript',
+        'css'=>'text/css',
+        'txt'=>'text/plain',
+        'xml'=>'text/xml',
+        'json'=>'application/json',
+        'gif'=>'image/gif',
+        'jpeg'=>'image/jpeg',
+        'jpg'=>'image/jpeg',
+        'jpe'=>'image/jpeg',
+        'png'=>'image/png',
 
+        'pdf'=>'application/pdf',
+
+    );
+    return $types[$ext] ? $types[$ext] : 'text/html';
+}

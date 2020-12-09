@@ -12,7 +12,7 @@ class Index extends Base
     public function index()
     {
         $request = request();
-        $p = $request->url();
+        $tpu = $request->url();
         $config = config('maccms');
         $domain = $_SERVER['HTTP_HOST'];
         //spider
@@ -25,6 +25,15 @@ class Index extends Base
                 exit;
             }
         }
+
+        //预留
+        if(empty($config['app']['img_file'])){
+            $config['app']['img_file'] = 'img.php';
+        }
+        if(empty($config['external']['file'])){
+            $config['external']['file'] = 'link.php';
+        }
+
 
         //匹配规则
         $rep_list = config('rep');
@@ -58,8 +67,8 @@ class Index extends Base
         if($_SERVER['PHP_SELF']!='/index.php'){
             $url .= $_SERVER['PHP_SELF'];
         }
-        if(!empty($p) && $p!='/' && $p!='/index.php'){
-            $url .= ''. $p;
+        if(!empty($tpu) && $tpu!='/' && $tpu!='/index.php'){
+            $url .= ''. $tpu;
         }
 
         $rep_url = $GLOBALS['http_type'] . $domain . '';
@@ -77,12 +86,6 @@ class Index extends Base
 
         $html = mac_curl_get($url,$heads);
         $html = mac_convert_encoding($html,'UTF-8',$rep['charset']);
-
-        //替换url
-        $p = pathinfo($rep['tourl']);
-        $html = str_replace($p['basename'],$domain,$html);
-        $html = str_replace($rep_url.$rep_url,$rep_url,$html);
-        //dump($p);die;
         //echo($html);die;
 
         //替换配置
@@ -100,80 +103,132 @@ class Index extends Base
         }
         //echo($html);die;
 
-        if($config['app']['zy_status'] =='0') {
-            //css
-            $arr = [];
-            $preg = '/<link([\s\S]+?)href=[\'"]?([^>\'"\s]*)([\s\S]+?)>/is';
-            preg_match_all($preg, $html, $out);
-            foreach ($out[2] as $k => $v) {
-                $a = substr($v,0,1);
-                if(strlen($v)>5 && in_array($a,['/','.'])) {
-                    if (empty($arr[$v])) {
-                        $link = mac_url_check($v, $url);
-                        $html = str_replace($v, $link, $html);
-                    }
-                }
+        //img
+        $preg = '/<img([\s\S]+?)src=[\'"]?([^>\'"\s]*)[\'"]([\s\S]+?)>/is';
+        preg_match_all($preg,$html,$out);
+        foreach($out[2] as $k=>$v){
+            if(!empty($arr[$v])) {
+                continue;
             }
-            //dump($out);die;
+            $arr[$v] = $v;
+            if(substr($v,0,4)=='http' || substr($v,0,2)=='//'){
+                $img = $v;
+                if($config['app']['img_status'] =='1'){
+                    $img = '/'.$config['app']['img_file'].'?url='. $img;
+                }
+                $html = str_replace($v,$img, $html);
+            }
+            elseif(in_array(substr($v,0,1),['/','.'])){
+                if(empty($arr[$v])) {
+                    $link = mac_url_check($v, $url);
 
-            //js
-            $arr = [];
-            $preg = '/<script([\s\S]+?)src=[\'"]?([^>\'"\s]*)([\s\S]+?)>/is';
-            preg_match_all($preg, $html, $out);
-            foreach ($out[2] as $k => $v) {
-                $a = substr($v,0,1);
-                if(strlen($v)>5 && in_array($a,['/','.'])) {
-                    if (empty($arr[$v])) {
-                        $link = mac_url_check($v, $url);
-                        $html = str_replace($v, $link, $html);
+                    $img = $rep['tourl'] . $link;
+                    if($config['app']['img_status'] =='1'){
+                        $img = '/'.$config['app']['img_file'].'?url='. $img;
                     }
+                    $html = str_replace($v, $img, $html);
                 }
             }
-            //dump($out);die;
+            else{
+
+            }
         }
+        //dump($arr);die;
+        //echo($html);die;
+
+        //css
+        $arr = [];
+        $preg = '/<link([\s\S]+?)href=[\'"]?([^>\'"\s]*)([\s\S]+?)>/is';
+        preg_match_all($preg, $html, $out);
+        foreach ($out[2] as $k => $v) {
+            if(!empty($arr[$v])) {
+                continue;
+            }
+            if(strpos($v,'rel=')===false){
+                continue;
+            }
+            $arr[$v] = $v;
+            if(substr($v,0,4)=='http' || substr($v,0,2)=='//'){
+
+            }
+            elseif(in_array(substr($v,0,1),['/','.'])){
+                if($config['app']['zy_status'] =='1'){
+                    $link = mac_url_check($v, $url);
+                    $html = str_replace($v, $link, $html);
+                }
+            }
+            else{
+
+            }
+        }
+        //dump($out);die;
+        //echo($html);die;
+
+        //js
+        $arr = [];
+        $preg = '/<script([\s\S]+?)src=[\'"]?([^>\'"\s]*)([\s\S]+?)>/is';
+        preg_match_all($preg, $html, $out);
+        foreach ($out[2] as $k => $v) {
+            if(!empty($arr[$v])) {
+                continue;
+            }
+            $arr[$v] = $v;
+            if(substr($v,0,4)=='http' || substr($v,0,2)=='//'){
+
+            }
+            elseif(in_array(substr($v,0,1),['/','.'])) {
+                if($config['app']['zy_status'] =='1'){
+                    $link = mac_url_check($v, $url);
+                    $html = str_replace($v, $link, $html);
+                }
+            }
+            else{
+
+            }
+        }
+        //dump($out);die;
+        //echo($html);die;
+
+        //替换url
+        $pi = pathinfo($rep['tourl']);
+        $html = str_replace($pi['basename'],$domain,$html);
+        $html = str_replace($rep_url.$rep_url,$rep_url,$html);
+        //dump($pi);die;
+        //echo($html);die;
 
         //a
         $arr = [];
         $preg = '/<a([\s\S]+?)href=[\'"]?([^>\'" ]*)[\'"]([\s\S]+?)>/is';
         preg_match_all($preg, $html, $out);
         foreach($out[2] as $k=>$v){
-            $a = substr($v,0,1);
-            if(strlen($v)>5 && in_array($a,['/','.'])){
-                if(empty($arr[$v])) {
-                    $link = mac_url_check($v, $url);
-                    $arr[$v] = $rep_url.$link;
-                    $html = str_replace($v, $rep_url. $link, $html);
-                }
+            if(empty($v) || !empty($arr[$v])){
+                continue;
             }
-        }
-        //dump($out);die;
-
-        //img
-        $preg = '/<img([\s\S]+?)src=[\'"]?([^>\'"\s]*)[\'"]([\s\S]+?)>/is';
-        preg_match_all($preg,$html,$out);
-        foreach($out[2] as $k=>$v){
-            $a = substr($v,0,1);
-            if(strlen($v)>5 && in_array($a,['/','.'])){
-                if(empty($arr[$v])) {
-                    $link = mac_url_check($v, $url);
-                    $arr[$v] = $rep_url . $link;
-                    $img = $rep['tourl'] . $link;
-                    if($config['app']['img_status'] =='1'){
-                        $img = '/img.php?url='. $img;
+            $arr[$v] = $v;
+            if(substr($v,0,4)=='http' || substr($v,0,2)=='//') {
+                if(empty($config['external']['ignore_domain']) || !preg_match('/'.$config['external']['ignore_domain'].'/',$v)){
+                    $v_ec = urlencode($v);
+                    if($config['external']['encode']==1){
+                        $v_ec = base64_encode($v);
                     }
-                    $html = str_replace($v, $img, $html);
+                    $link = '/'.$config['external']['file'].'?mode='.$config['external']['mode'].'&url='.$v_ec;
+                    $html = str_replace($v, $link, $html);
                 }
             }
-            elseif(substr($v,0,4)==='http'){
-                $img = $v;
-                if($config['app']['img_status'] =='1'){
-                    $img = '/img.php?url='. $img;
+            else{
+                if(preg_match('/'.$config['app']['ignore_suffix'].'/is',$v)){
+                    $link = mac_url_check($v,$rep['tourl']);
+                    $html = str_replace($v, $link, $html);
                 }
-                $html = str_replace($v,$img, $html);
             }
         }
         //dump($arr);die;
+        //echo($html);die;
 
+        //type
+        header("Content-type: ".mac_content_type($tpu));
+
+        //compress
         if($config['app']['compress'] == 1){
             $html = mac_compress_html($html);
         }
