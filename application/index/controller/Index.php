@@ -206,10 +206,10 @@ class Index extends Base
             }
             $arr[$v] = $v;
             if(substr($v,0,4)=='http' || substr($v,0,2)=='//') {
-                if(empty($config['external']['ignore_domain']) || !preg_match('/'.$config['external']['ignore_domain'].'/',$v)){
+                if($config['external']['status']==1 && (empty($config['external']['ignore_domain']) || !preg_match('/'.$config['external']['ignore_domain'].'/',$v))){
                     $v_ec = urlencode($v);
                     if($config['external']['encode']==1){
-                        $v_ec = base64_encode($v);
+                        $v_ec = urlencode(base64_encode($v));
                     }
                     $link = '/'.$config['external']['file'].'?mode='.$config['external']['mode'].'&url='.$v_ec;
                     $html = str_replace($v, $link, $html);

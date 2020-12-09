@@ -18,7 +18,7 @@ return array (
   array (
     'useragent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36 Edg/87.0.664.57',
     'ignore_suffix' => 'zip|rar|doc|pdf|7z',
-    'img_status' => '1',
+    'img_status' => '0',
     'img_file' => 'img.php',
     'zy_status' => '0',
     'ip_status' => '0',
@@ -54,7 +54,7 @@ return array (
   array (
     'status' => '0',
     'encode' => '0',
-    'mode' => '0',
+    'mode' => '1',
     'file' => 'link.php',
     'ignore_domain' => '',
   ),
